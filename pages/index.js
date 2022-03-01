@@ -4,8 +4,18 @@ import Seo from "../components/Seo";
 
 export default function Home({ results }) {
   const router = useRouter();
-  const onMovieClick = (id) => {
-    router.push(`/movies/${id}`);
+  const onMovieClick = (id, title) => {
+    //router를 통해 링크연결하는 방법
+    //다음과 같은 방법으로 쿼리를 url에서 숨길 수 있다(마스킹 가능)
+    router.push(
+      {
+        pathname: `/movies/${id}`,
+        query: {
+          title,
+        },
+      },
+      `/movies/${id}`
+    );
   };
   return (
     <div className="container">
@@ -15,14 +25,22 @@ export default function Home({ results }) {
         <div
           className="movie"
           key={movie.id}
-          onClick={() => onMovieClick(movie.id)}
+          onClick={() => onMovieClick(movie.id, movie.original_title)}
         >
           <img
             src={`/api/image${movie.poster_path}`}
             alt={movie.original_title}
           />
-          {/* Link, a 태그는 기본적으로 텍스트를 감싼다고 함.. */}
-          <Link href={`movies/${movie.id}`}>
+          {/* 다음과 같은 방법으로 쿼리를 url에서 숨길 수 있다(마스킹 가능) */}
+          <Link
+            href={{
+              pathname: `/movies/${movie.id}`,
+              query: {
+                title: movie.original_title,
+              },
+            }}
+            as={`/movies/${movie.id}`}
+          >
             <a>
               <h4>{movie.original_title}</h4>
             </a>
