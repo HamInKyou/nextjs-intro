@@ -6,9 +6,7 @@ export default function Home() {
   const [movies, setMovies] = useState(); //초기 state를 아예 빈배열도 아닌 undefined로!
   useEffect(() => {
     (async () => {
-      const response = await fetch(
-        `https://api.themoviedb.org/3/movie/popular?api_key=${API_KEY}`
-      );
+      const response = await fetch("/api/movies");
       const data = await response.json();
       setMovies(data.results);
     })(); //익명함수를 만들고 바로 실행시키기
@@ -22,7 +20,7 @@ export default function Home() {
       {movies?.map((movie) => (
         <div className="movie" key={movie.id}>
           <img
-            src={`https://image.tmdb.org/t/p/w500/${movie.poster_path}`}
+            src={`/api/image/${movie.poster_path}`}
             alt={movie.original_title}
           />
           <h4>{movie.original_title}</h4>
