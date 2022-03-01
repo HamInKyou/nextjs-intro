@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import Seo from "../components/Seo";
 
-const API_KEY = "57644f2e20cf1ba7f37fe8ae2dbb46bf";
 export default function Home() {
   const [movies, setMovies] = useState(); //초기 state를 아예 빈배열도 아닌 undefined로!
   useEffect(() => {
