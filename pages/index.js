@@ -1,17 +1,32 @@
+import Link from "next/link";
+import { useRouter } from "next/router";
 import Seo from "../components/Seo";
 
 export default function Home({ results }) {
+  const router = useRouter();
+  const onMovieClick = (id) => {
+    router.push(`/movies/${id}`);
+  };
   return (
     <div className="container">
       <Seo title="Home" />
       {/*dada가 있으면? .map 실행*/}
       {results?.map((movie) => (
-        <div className="movie" key={movie.id}>
+        <div
+          className="movie"
+          key={movie.id}
+          onClick={() => onMovieClick(movie.id)}
+        >
           <img
             src={`/api/image${movie.poster_path}`}
             alt={movie.original_title}
           />
-          <h4>{movie.original_title}</h4>
+          {/* Link, a 태그는 기본적으로 텍스트를 감싼다고 함.. */}
+          <Link href={`movies/${movie.id}`}>
+            <a>
+              <h4>{movie.original_title}</h4>
+            </a>
+          </Link>
         </div>
       ))}
       <style jsx>{`
