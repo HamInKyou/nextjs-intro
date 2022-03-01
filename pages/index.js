@@ -1,22 +1,11 @@
-import { useEffect, useState } from "react";
 import Seo from "../components/Seo";
 
-export default function Home() {
-  const [movies, setMovies] = useState(); //초기 state를 아예 빈배열도 아닌 undefined로!
-  useEffect(() => {
-    (async () => {
-      const response = await fetch("/api/movies");
-      const data = await response.json();
-      setMovies(data.results);
-    })(); //익명함수를 만들고 바로 실행시키기
-  }, []);
+export default function Home({ results }) {
   return (
     <div className="container">
       <Seo title="Home" />
-      {/*movies가 undefined면 Loading... 띄우기*/}
-      {!movies && <h4>Loading...</h4>}
-      {/*movies가 있으면? .map 실행*/}
-      {movies?.map((movie) => (
+      {/*dada가 있으면? .map 실행*/}
+      {results?.map((movie) => (
         <div className="movie" key={movie.id}>
           <img
             src={`/api/image/${movie.poster_path}`}
@@ -48,4 +37,18 @@ export default function Home() {
       `}</style>
     </div>
   );
+}
+
+//이 코드는 서버에서만 동작! 클라이언트 쪽에선 어떤 일이 일어나는지 모름.
+export async function getServerSideProps() {
+  const response = await fetch("http://localhost:3000/api/movies"); //이건 절대경로(풀 경로)여야한다!
+  const { results } = await response.json();
+
+  //이 리턴하는 데이터가 페이지에 전달됨.
+  //props: {} 객체가 props로 전달되어, 이걸 활용하면 된다.
+  return {
+    props: {
+      results,
+    },
+  };
 }
